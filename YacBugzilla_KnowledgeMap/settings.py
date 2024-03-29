@@ -87,14 +87,14 @@ WSGI_APPLICATION = "YacBugzilla_KnowledgeMap.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 # 数据库连接设置
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": "YacBugzillaKMap_DB",
-        "USER": "root",  # 默认的用户名是 'root'
-        "PASSWORD": "",  # 密码留空,设置的登录不需要密码
-        "HOST": "localhost",  # docker中的mysqldb的IP
-        "PORT": "3306",
-    }
+    # "default": {
+    #     "ENGINE": "django.db.backends.mysql",
+    #     "NAME": "YacBugzillaKMap_DB",
+    #     "USER": "root",  # 默认的用户名是 'root'
+    #     "PASSWORD": "",  # 密码留空,设置的登录不需要密码
+    #     "HOST": "localhost",  # docker中的mysqldb的IP
+    #     "PORT": "3306",
+    # }
 }
 
 
