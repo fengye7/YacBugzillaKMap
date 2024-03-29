@@ -4,11 +4,13 @@
 
 pip/python环境
 
-![image](https://github.com/fengye7/YacBugzillaKmap/assets/117179005/14f4f76b-13fd-4ec2-aa80-0bd1981d1256)
+![image](https://github.com/fengye7/YacBugzillaKMap/assets/117179005/33ef4d8d-a644-4333-a68f-11b527587ab0)
+
 
 node.js环境
 
-![image](https://github.com/fengye7/YacBugzillaKmap/assets/117179005/3a441335-2501-43da-bca6-0d4ac48cbe36)
+![image](https://github.com/fengye7/YacBugzillaKMap/assets/117179005/45b48ad1-75cc-43ba-a3e9-a4fc4d3d1f1b)
+
 
 ## 配置后端
 
@@ -39,14 +41,16 @@ pip install django-filter
 ```bash
 pip install django-cors-headers
 ```
-![image](https://github.com/fengye7/YacBugzillaKmap/assets/117179005/4c7b9b62-b24b-40c1-891e-a93eafff3e50)
+![image](https://github.com/fengye7/YacBugzillaKMap/assets/117179005/f5a211b5-076e-46d1-affd-339bb460f061)
+
 
 
 ## 配置前端
 
 npm install -g @vue/cli
 
-![image](https://github.com/fengye7/YacBugzillaKmap/assets/117179005/76572e3c-4fff-46cd-b8d5-5b7d5c5a857c)
+![image](https://github.com/fengye7/YacBugzillaKMap/assets/117179005/4bb47fcc-5256-4f9e-9f7b-9b38e8522045)
+
 
 npm install axios 
 
