@@ -55,3 +55,22 @@ npm install -g @vue/cli
 npm install axios 
 
 npm install element-plus --save
+
+## 使用仓库
+***git pull***在每次push之前是必要的
+
+## 运行项目
+**后端**
+```
+python manage.py runserver
+```
+**前端**
+生成图形界面控制
+```
+vue ui
+```
+直接命令行
+```
+npm run serve 或 vue serve
+```
+```
