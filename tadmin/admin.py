@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 from tadmin.models import UserInfo
 
-admin.site.site_header = '任务管理系统'
+admin.site.site_header = '用户管理系统'
 
 
 class UserInfoAdmin(admin.ModelAdmin):
