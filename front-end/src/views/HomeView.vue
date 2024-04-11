@@ -16,6 +16,7 @@
         <el-menu-item index="home">首页</el-menu-item>
         <el-menu-item index="analysis">数据分析</el-menu-item>
         <el-menu-item index="prediction">预测分析</el-menu-item>
+        <el-menu-item index="knowledgeMap">数据图谱</el-menu-item>
       </el-menu>
     </el-header>
 
@@ -32,6 +33,10 @@
       <!-- 其他页面内容 -->
       <!-- <div v-else-if="activeMenu === 'analysis'"> 数据分析内容 </div>
       <div v-else-if="activeMenu === 'prediction'"> 预测分析内容 </div> -->
+      <div v-else-if="activeMenu === 'knowledgeMap'"> 
+        <h1>数据图谱</h1>
+        <k-map-charts/>
+      </div>
     </el-main>
 
     <!-- 页脚 -->
@@ -45,6 +50,7 @@
 
 <script setup>
 import { ref } from "vue";
+import KMapCharts from '../components/KMapCharts.vue'
 
 const activeMenu = ref("home");
 
