@@ -12,54 +12,54 @@ Mock.mock('/getKMapData', 'get', {
         nodes: [
             {
                 id:1,
-                name:'测试节点',
+                name:'测试节点1',
                 categary:'1',
                 symbolSize: 60
             },
             {
                 id:2,
-                name:'测试节点',
+                name:'测试节点2',
                 categary:'1',
                 symbolSize: 40
             },
             {
                 id:3,
-                name:'测试节点',
+                name:'测试节点3',
                 categary:'2',
             },
             {
                 id:4,
-                name:'测试节点',
+                name:'测试节点4',
                 categary:'',
             },
             {
                 id:5,
-                name:'测试节点测试节点',
+                name:'测试节点5',
                 categary:'',
             },
             {
                 id:6,
-                name:'测试节点',
+                name:'测试节点6',
                 categary:'2',
             },
             {
                 id:7,
-                name:'测试节点',
+                name:'测试节点7',
                 categary:'',
             },
             {
                 id:8,
-                name:'测试节点',
+                name:'测试节点8',
                 categary:'',
             },
             {
                 id:9,
-                name:'测试节点',
+                name:'测试节点9',
                 categary:'',
             },
             {
                 id:10,
-                name:'测试节点',
+                name:'测试节点10',
                 categary:'',
             }
         ],
