@@ -16,9 +16,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+# django项目目录下的urls.py，让首页显示打包的index.html文件
+from django.views.generic import TemplateView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/', include('tadmin.urls')),
+    path('st', include('st.urls')),
+    path('', TemplateView.as_view(template_name="index.html")) 
 ]
 
