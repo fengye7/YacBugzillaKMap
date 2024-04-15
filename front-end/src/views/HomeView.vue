@@ -3,20 +3,14 @@
     <!-- 导航栏 -->
     <el-header>
       <div class="logo">Yocto项目分析平台</div>
-      <el-menu
-        class="el-menu-demo"
-        v-model="activeMenu"
-        :default-active="activeMenu"
-        background-color="#545c64"
-        text-color="#fff"
-        active-text-color="#ffd04b"
-        mode="horizontal"
-        @select="handleMenuSelect"
-      >
+      <el-menu class="el-menu-demo" v-model="activeMenu" :default-active="activeMenu" background-color="#545c64"
+        text-color="#fff" active-text-color="#ffd04b" mode="horizontal" @select="handleMenuSelect">
         <el-menu-item index="home">首页</el-menu-item>
         <el-menu-item index="analysis">数据分析</el-menu-item>
         <el-menu-item index="prediction">预测分析</el-menu-item>
         <el-menu-item index="knowledgeMap">数据图谱</el-menu-item>
+        <el-menu-item index="statistics">数据统计</el-menu-item>
+        <el-menu-item index="scrapy">数据爬取</el-menu-item>
       </el-menu>
     </el-header>
 
@@ -33,9 +27,20 @@
       <!-- 其他页面内容 -->
       <!-- <div v-else-if="activeMenu === 'analysis'"> 数据分析内容 </div>
       <div v-else-if="activeMenu === 'prediction'"> 预测分析内容 </div> -->
-      <div v-else-if="activeMenu === 'knowledgeMap'"> 
+
+      <div v-else-if="activeMenu === 'statistics'">
+        <h1>数据统计内容</h1>
+        <data-statistics :width="'900px'" :height="'600px'" />
+      </div>
+
+      <div v-else-if="activeMenu === 'scrapy'">
+        <h1>数据爬取内容</h1>
+        <data-scrapy :width="'900px'" :height="'600px'" />
+      </div>
+
+      <div v-else-if="activeMenu === 'knowledgeMap'">
         <h1>数据图谱</h1>
-        <k-map-charts/>
+        <k-map-charts />
       </div>
     </el-main>
 
@@ -49,6 +54,8 @@
 </template>
 
 <script setup>
+import DataStatistics from "../components/DataStatistics.vue";
+import DataScrapy from "../components/DataScrapy.vue";
 import { ref } from "vue";
 import KMapCharts from '../components/KMapCharts.vue'
 
