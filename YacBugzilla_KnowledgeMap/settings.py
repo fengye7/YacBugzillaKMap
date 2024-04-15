@@ -44,8 +44,9 @@ INSTALLED_APPS = [
     "rest_framework",  # 增加的django图形GUI
     "django_filters",  # 增加的filter
     'drf_yasg',  # swagger
-    "tadmin",  # 账户管理
-    'corsheaders', # 支持跨域
+    "corsheaders", # 支持跨域
+    "DataHandler", # BugHandler
+    "CommentHandler", # CommentHandler
 ]
 
 MIDDLEWARE = [
@@ -87,14 +88,14 @@ WSGI_APPLICATION = "YacBugzilla_KnowledgeMap.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 # 数据库连接设置
 DATABASES = {
-    # "default": {
-    #     "ENGINE": "django.db.backends.mysql",
-    #     "NAME": "YacBugzillaKMap_DB",
-    #     "USER": "root",  # 默认的用户名是 'root'
-    #     "PASSWORD": "",  # 密码留空,设置的登录不需要密码
-    #     "HOST": "localhost",  # docker中的mysqldb的IP
-    #     "PORT": "3306",
-    # }
+    "default": {
+        "ENGINE": "django.db.backends.mysql",
+        "NAME": "YacBugzillaKMap_DB",
+        "USER": "root",  # 默认的用户名是 'root'
+        "PASSWORD": "",  # 密码留空,设置的登录不需要密码
+        "HOST": "localhost",  # docker中的mysqldb的IP
+        "PORT": "3306",
+    }
 }
 
 
@@ -119,10 +120,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
-
-LANGUAGE_CODE = "en-us"
-
-TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -149,3 +146,16 @@ REST_FRAMEWORK = {
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 10,
 }
+
+# 语言和时区
+LANGUAGE_CODE = 'zh-hans'
+TIME_ZONE = 'Asia/Shanghai'
+
+# 确保ADMIN_URL配置正确
+ADMIN_URL = 'admin/'
+
+# 确保LOGIN_URL配置正确
+LOGIN_URL = 'admin/login/'
+
+# 确保LOGIN_REDIRECT_URL配置正确
+LOGIN_REDIRECT_URL = 'admin/'
