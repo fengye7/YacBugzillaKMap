@@ -4,6 +4,6 @@ from DataHandler.models import BugTuple
 # Register your models here.
 admin.site.site_header = 'BugHandler'
 class BugTupleAdmin(admin.ModelAdmin):
-    list_display = ('id','alias','summary','status','product','component','version','hardware','importance','QA','keywords','reported','modified','ccList','assignee')
+    list_display = ('id','product','component','assignee','status','summary','version','platform', 'op_sys','priority','severity','QA','ccList','reportedId')
 
 admin.site.register(BugTuple, BugTupleAdmin)

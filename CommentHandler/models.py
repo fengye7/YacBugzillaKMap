@@ -24,4 +24,4 @@ class Comment(models.Model):
         get_latest_by = "time"
 
     def __str__(self):
-        return self.content
+        return self.id
