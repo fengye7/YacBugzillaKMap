@@ -7,8 +7,8 @@ import pandas as pd
 import openpyxl
 import os
 
-# targetUrl = "https://bugzilla.yoctoproject.org/buglist.cgi?bug_status=__all__&limit=0&no_redirect=1&order=changeddate%20DESC%2Cpriority%2Cbug_severity&query_format=specific"
-targetUrl = "https://bugzilla.yoctoproject.org/buglist.cgi?bug_status=__open__&no_redirect=1&order=changeddate%20DESC%2Cpriority%2Cbug_severity&query_format=specific"
+targetUrl = "https://bugzilla.yoctoproject.org/buglist.cgi?bug_status=__all__&limit=0&no_redirect=1&order=changeddate%20DESC%2Cpriority%2Cbug_severity&query_format=specific"
+# targetUrl = "https://bugzilla.yoctoproject.org/buglist.cgi?bug_status=__open__&no_redirect=1&order=changeddate%20DESC%2Cpriority%2Cbug_severity&query_format=specific"
 
 # from selenium import webdriver
 # from selenium.webdriver.common.by import By
@@ -221,6 +221,99 @@ def get_bug_details(bugId):
         print("获取页面失败")
         return None, None
 
+# def get_bug_data(url):
+#     global comment_data
+#     soup = get_html(targetUrl)
+#     if checkLogin('zcj15984304723@163.com', soup) is False:
+#         print("未正常登录", url)
+#         return [], []
+#     if soup is not None:
+#         table = get_table(soup)
+#         if table:
+#             trs = get_trs(table)
+
+#             # 打开现有的 Excel 文件 获取现有工作表
+#             bug_workbook = None
+#             bug_sheet = None
+#             bug_comment_workbook = None
+#             bug_comment_sheet = None
+#             if os.path.exists("bug_data.xlsx"):
+#                 try:
+#                     bug_workbook = openpyxl.load_workbook("bug_data.xlsx")
+#                     bug_sheet = bug_workbook["Sheet1"]
+#                 except:
+#                     print("bug_data.xlsx 文件损坏，将重新创建新文件")
+#                     os.remove("bug_data.xlsx")
+#                     bug_workbook = openpyxl.Workbook()
+#                     bug_sheet = bug_workbook.active
+#                     bug_sheet.title = "Sheet1" # type: ignore
+#             else:
+#                 bug_workbook = openpyxl.Workbook()
+#                 bug_sheet = bug_workbook.active
+#                 bug_sheet.title = "Sheet1" # type: ignore
+
+#             if os.path.exists("bug_comment_data.xlsx"):
+#                 try:
+#                     bug_comment_workbook = openpyxl.load_workbook("bug_comment_data.xlsx")
+#                     bug_comment_sheet = bug_comment_workbook["Sheet1"]
+#                 except:
+#                     print("bug_comment_data.xlsx 文件损坏，将重新创建新文件")
+#                     os.remove("bug_comment_data.xlsx")
+#                     bug_comment_workbook = openpyxl.Workbook()
+#                     bug_comment_sheet = bug_comment_workbook.active
+#                     bug_comment_sheet.title = "Sheet1" # type: ignore
+#             else:
+#                 bug_comment_workbook = openpyxl.Workbook()
+#                 bug_comment_sheet = bug_comment_workbook.active
+#                 bug_comment_sheet.title = "Sheet1" # type: ignore
+#             print(bug_sheet.max_row,bug_comment_sheet.max_row) # type: ignore
+
+#             for tr in trs:
+#                 bug_data = []
+#                 comment_data = []
+#                 tmp_data = analyse_tr(tr)
+#                 bug_id = tmp_data[0]
+#                 bugInfo, comments = get_bug_details(int(bug_id))
+#                 if bugInfo is not None:
+#                     tmp_data += bugInfo  # type: ignore # 将 bug 信息添加到临时数据列表
+#                     if len(tmp_data) == 14:
+#                         bug_data.append(tmp_data)
+#                         # 将新的数据添加到 DataFrame 中
+#                         df_bug_new = pd.DataFrame(bug_data, columns=["ID", "Product", "Component", "Assignee", "Status", "Summary", "Version", "Platform", "Op_sys", "Priority", "Severity", "QA", "CCList", "ReportedId"])
+#                         # 将新的数据追加到现有的 Excel 表格中
+#                         with pd.ExcelWriter("bug_data.xlsx", mode="a", engine="openpyxl", if_sheet_exists='overlay') as writer:
+#                             df_bug_new.to_excel(writer, index=False, header=False, sheet_name="Sheet1", startrow=(bug_sheet.max_row if bug_sheet is not None else 0)) # type: ignore
+
+#                 if comments is not None:
+#                     if len(comments) == 5:
+#                         comment_data.extend(comments)
+#                         df_comment_new = pd.DataFrame(comment_data, columns=["ID", "Commentator", "Time", "Content", "BugId"])
+#                         with pd.ExcelWriter("bug_comment_data.xlsx", mode="a", engine="openpyxl",if_sheet_exists='overlay') as writer:
+#                             df_comment_new.to_excel(writer, index=False, header=False, sheet_name="Sheet1", startrow=(bug_comment_sheet.max_row if bug_comment_sheet is not None else 0)) # type: ignore
+
+#                 bug_workbook.save("bug_data.xlsx")
+#                 bug_comment_workbook.save("bug_comment_data.xlsx")
+#                 print("Bug:", bug_id, "Finished")
+#             print("数据存储成功")
+#             # 保存并关闭 Excel 文件
+#             bug_workbook.save("bug_data.xlsx")
+#             bug_workbook.close()
+#             bug_comment_workbook.save("bug_comment_data.xlsx")
+#             bug_comment_workbook.close()
+#         else:
+#             print("未找到表格")
+#     else:
+#         print("获取页面失败")
+
+#             # df_bug = pd.DataFrame(bug_data, columns=["ID", "Product", "Component", "Assignee", "Status", "Summary", "Version","Platform","Op_sys","Priority","Severity","QA","CCList", "ReportedId"])
+#             # df_bug.to_excel("bug_data.xlsx", index=False)
+#             # df_comment = pd.DataFrame(comment_data, columns=["ID", "Commentator", "Time", "Content", "BugId"])
+#             # df_comment.to_excel("bug__comment.xlsx", index=False)
+#             # df_reported = pd.DataFrame(reported_data, columns=["ID", "User", "Time", "BugId"])
+#             # df_reported.to_excel("bug__reported.xlsx", index=False)
+#             # df_modified = pd.DataFrame(modified_data, columns=["ID", "User", "Time", "BugId"])
+#             # df_modified.to_excel("bug__modified.xlsx", index=False)
+
 def get_bug_data(url):
     global comment_data
     soup = get_html(targetUrl)
@@ -231,46 +324,9 @@ def get_bug_data(url):
         table = get_table(soup)
         if table:
             trs = get_trs(table)
-
-            # 打开现有的 Excel 文件 获取现有工作表
-            bug_workbook = None
-            bug_sheet = None
-            bug_comment_workbook = None
-            bug_comment_sheet = None
-            if os.path.exists("bug_data.xlsx"):
-                try:
-                    bug_workbook = openpyxl.load_workbook("bug_data.xlsx")
-                    bug_sheet = bug_workbook["Sheet1"]
-                except:
-                    print("bug_data.xlsx 文件损坏，将重新创建新文件")
-                    os.remove("bug_data.xlsx")
-                    bug_workbook = openpyxl.Workbook()
-                    bug_sheet = bug_workbook.active
-                    bug_sheet.title = "Sheet1" # type: ignore
-            else:
-                bug_workbook = openpyxl.Workbook()
-                bug_sheet = bug_workbook.active
-                bug_sheet.title = "Sheet1" # type: ignore
-
-            if os.path.exists("bug_comment_data.xlsx"):
-                try:
-                    bug_comment_workbook = openpyxl.load_workbook("bug_comment_data.xlsx")
-                    bug_comment_sheet = bug_comment_workbook["Sheet1"]
-                except:
-                    print("bug_comment_data.xlsx 文件损坏，将重新创建新文件")
-                    os.remove("bug_comment_data.xlsx")
-                    bug_comment_workbook = openpyxl.Workbook()
-                    bug_comment_sheet = bug_comment_workbook.active
-                    bug_comment_sheet.title = "Sheet1" # type: ignore
-            else:
-                bug_comment_workbook = openpyxl.Workbook()
-                bug_comment_sheet = bug_comment_workbook.active
-                bug_comment_sheet.title = "Sheet1" # type: ignore
-            print(bug_sheet.max_row,bug_comment_sheet.max_row) # type: ignore
-
+            bug_data = []
+            comment_data = []
             for tr in trs:
-                bug_data = []
-                comment_data = []
                 tmp_data = analyse_tr(tr)
                 bug_id = tmp_data[0]
                 bugInfo, comments = get_bug_details(int(bug_id))
@@ -278,41 +334,24 @@ def get_bug_data(url):
                     tmp_data += bugInfo  # type: ignore # 将 bug 信息添加到临时数据列表
                     if len(tmp_data) == 14:
                         bug_data.append(tmp_data)
-                        # 将新的数据添加到 DataFrame 中
-                        df_bug_new = pd.DataFrame(bug_data, columns=["ID", "Product", "Component", "Assignee", "Status", "Summary", "Version", "Platform", "Op_sys", "Priority", "Severity", "QA", "CCList", "ReportedId"])
-                        # 将新的数据追加到现有的 Excel 表格中
-                        with pd.ExcelWriter("bug_data.xlsx", mode="a", engine="openpyxl", if_sheet_exists='overlay') as writer:
-                            df_bug_new.to_excel(writer, index=False, header=False, sheet_name="Sheet1", startrow=(bug_sheet.max_row if bug_sheet is not None else 0)) # type: ignore
-
                 if comments is not None:
                     if len(comments) == 5:
                         comment_data.extend(comments)
-                        df_comment_new = pd.DataFrame(comment_data, columns=["ID", "Commentator", "Time", "Content", "BugId"])
-                        with pd.ExcelWriter("bug_comment_data.xlsx", mode="a", engine="openpyxl",if_sheet_exists='overlay') as writer:
-                            df_comment_new.to_excel(writer, index=False, header=False, sheet_name="Sheet1", startrow=(bug_comment_sheet.max_row if bug_comment_sheet is not None else 0)) # type: ignore
-
-                bug_workbook.save("bug_data.xlsx")
-                bug_comment_workbook.save("bug_comment_data.xlsx")
                 print("Bug:", bug_id, "Finished")
+            df_bug = pd.DataFrame(bug_data, columns=["ID", "Product", "Component", "Assignee", "Status", "Summary", "Version","Platform","Op_sys","Priority","Severity","QA","CCList", "ReportedId"])
+            df_bug.to_excel("bug_data.xlsx", index=False)
+            df_comment = pd.DataFrame(comment_data, columns=["ID", "Commentator", "Time", "Content", "BugId"])
+            df_comment.to_excel("bug__comment.xlsx", index=False)
+            df_reported = pd.DataFrame(reported_data, columns=["ID", "User", "Time", "BugId"])
+            df_reported.to_excel("bug__reported.xlsx", index=False)
+            df_modified = pd.DataFrame(modified_data, columns=["ID", "User", "Time", "BugId"])
+            df_modified.to_excel("bug__modified.xlsx", index=False)
             print("数据存储成功")
-            # 保存并关闭 Excel 文件
-            bug_workbook.save("bug_data.xlsx")
-            bug_workbook.close()
-            bug_comment_workbook.save("bug_comment_data.xlsx")
-            bug_comment_workbook.close()
         else:
             print("未找到表格")
     else:
         print("获取页面失败")
 
-            # df_bug = pd.DataFrame(bug_data, columns=["ID", "Product", "Component", "Assignee", "Status", "Summary", "Version","Platform","Op_sys","Priority","Severity","QA","CCList", "ReportedId"])
-            # df_bug.to_excel("bug_data.xlsx", index=False)
-            # df_comment = pd.DataFrame(comment_data, columns=["ID", "Commentator", "Time", "Content", "BugId"])
-            # df_comment.to_excel("bug__comment.xlsx", index=False)
-            # df_reported = pd.DataFrame(reported_data, columns=["ID", "User", "Time", "BugId"])
-            # df_reported.to_excel("bug__reported.xlsx", index=False)
-            # df_modified = pd.DataFrame(modified_data, columns=["ID", "User", "Time", "BugId"])
-            # df_modified.to_excel("bug__modified.xlsx", index=False)
 
 
 def checkLogin(user,soup):
@@ -333,7 +372,7 @@ def checkLogin(user,soup):
 get_bug_data(targetUrl)
 # get_bug_details(13364)
 
-df_reported = pd.DataFrame(reported_data, columns=["ID", "User", "Time", "BugId"])
-df_reported.to_excel("bug__reported.xlsx", index=False)
-df_modified = pd.DataFrame(modified_data, columns=["ID", "User", "Time", "BugId"])
-df_modified.to_excel("bug__modified.xlsx", index=False)
+# df_reported = pd.DataFrame(reported_data, columns=["ID", "User", "Time", "BugId"])
+# df_reported.to_excel("bug__reported.xlsx", index=False)
+# df_modified = pd.DataFrame(modified_data, columns=["ID", "User", "Time", "BugId"])
+# df_modified.to_excel("bug__modified.xlsx", index=False)

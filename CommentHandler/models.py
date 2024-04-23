@@ -6,8 +6,8 @@ class Comment(models.Model):
     id = models.IntegerField("id",primary_key=True) # Unique identifier for the comment
     commentator = models.CharField("commentator",max_length=50) # bug评论者
     content = models.TextField("content", max_length = 300) # bug评论内容
-    time = models.DateTimeField("time",auto_now_add=True) # bug评论时间
-    bugId = models.ForeignKey(BugTuple,on_delete=models.PROTECT,related_name="comment_set",to_field="id",verbose_name="Bug ID") # 外键bug id
+    time = models.DateTimeField("time") # bug评论时间
+    bugId =  models.IntegerField("Bug ID") # 外键bug id
 
     class Meta:
         db_table = "comment"

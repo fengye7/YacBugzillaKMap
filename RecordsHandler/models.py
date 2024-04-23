@@ -5,8 +5,8 @@ from DataHandler.models import BugTuple
 class Reported(models.Model):
     id = models.IntegerField("id",primary_key=True)
     user = models.CharField("user", max_length=50) # bug报告者
-    time = models.DateTimeField("time",auto_now_add=True) # bug报告时间
-    bugId = models.ForeignKey(BugTuple,on_delete=models.PROTECT,related_name="bug_reported",to_field="id",verbose_name="Bug ID") # 外键bug id
+    time = models.DateTimeField("time") # bug报告时间
+    bugId = models.IntegerField("Bug ID") # 外键bug id
 
     class Meta:
         db_table = "reported"
@@ -29,8 +29,8 @@ class Reported(models.Model):
 class Modified(models.Model):
     id = models.IntegerField("id",primary_key=True)
     user = models.CharField("user", max_length=50) # bug修改者
-    time = models.DateTimeField("time",auto_now_add=True) # bug修改时间
-    bugId = models.ForeignKey(BugTuple,on_delete=models.PROTECT,related_name="bug_modified",to_field="id",verbose_name="Bug ID") # 外键bug id
+    time = models.DateTimeField("time") # bug修改时间
+    bugId = models.IntegerField("Bug ID") # 外键bug id
 
     class Meta:
         db_table = "modified"

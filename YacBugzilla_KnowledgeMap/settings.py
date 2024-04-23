@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'drf_yasg',  # swagger
     "corsheaders", # 支持跨域
     "DataHandler", # BugHandler
-    # "CommentHandler", # CommentHandler
-    # "RecordsHandler", # RecordsHandler/ ModifiedHandler
+    "CommentHandler", # CommentHandler
+    "RecordsHandler", # RecordsHandler/ ModifiedHandler
 ]
 
 MIDDLEWARE = [
