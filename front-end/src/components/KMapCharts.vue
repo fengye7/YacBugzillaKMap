@@ -1,17 +1,23 @@
 <template>
-  <div id="KMapChart" class="k-map-chart"></div>
+  <el-container><div id="KMapChart" class="k-map-chart"></div>
+   <div>
+    <button @click="fetchData">Fetch Data</button>
+    <div v-if="testdata">
+      <p>{{ testdata }}</p>
+    </div>
+  </div>
+  </el-container>
 </template>
 
 <script setup>
-import { onMounted, ref, getCurrentInstance } from "vue";
+import { onMounted, ref } from "vue";
 var echarts = require("echarts/lib/echarts");
 require("echarts/lib/chart/graph");
 require("echarts/lib/component/tooltip");
 require("echarts/lib/component/title");
 
 import "../mock/KMapMock";
-
-const { proxy } = getCurrentInstance();
+import { MockAPI } from "@/utils/request";
 let KMapChart = null;
 let kMapData = {};
 const seriesData = ref([]);
@@ -39,16 +45,23 @@ onMounted(async () => {
   initKMapChart(); // 调用渲染函数
 });
 
+let testdata = ref(null);
+import {getKMapData} from '@/api/KMapAPI.js'
+async function fetchData() {
+      try {
+        testdata = await getKMapData();
+        console.log(testdata);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
 /**
  * 初始化图表数据
  */
 async function initKMapData() {
   return new Promise((resolve, reject) => {
-    proxy
-      .$axios({
-        url: "/getKMapData",
-        method: "get",
-      })
+    MockAPI.get("kMap/getKMapDataMock")
       .then((res) => {
         kMapData = res.data.dataset;
         resolve(); // 请求成功后调用 resolve
