@@ -96,7 +96,7 @@ DATABASES = {
         "NAME": "YacBugzillaKMap_DB",
         "USER": "root",  # 默认的用户名是 'root'
         "PASSWORD": "",  # 密码留空,设置的登录不需要密码
-        "HOST": "localhost",  # docker中的mysqldb的IP
+        "HOST": "192.168.56.1",  # docker中的mysqldb的IP
         "PORT": "3306",
     }
 }
