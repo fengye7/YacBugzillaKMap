@@ -148,7 +148,6 @@ def storeComments():
 
 # Reported.objects.all().delete()
 # storeReported()
-# storeReported()
 # storeModified()
 # storeBugTuple()
 storeComments()
