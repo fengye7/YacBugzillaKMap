@@ -4,7 +4,7 @@ import AnalysisView from '../views/AnalysisView.vue';
 import PredictionView from '../views/PredictionView.vue';
 import KnowledgeMapView from '../views/KnowledgeMapView.vue';
 import StatisticsView from '../views/StatisticsView.vue';
-import ExhibitionView from '../views/ExhibitionView.vue';
+import ExhibitionView from '../views/ExhibitionView.vue'; // 数据展览
 
 const routes = [
   {
