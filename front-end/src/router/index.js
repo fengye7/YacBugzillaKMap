@@ -13,32 +13,32 @@ const routes = [
   },
   {
     path: '/home',
-    name: 'Home',
+    name: 'home',
     component: HomeView,
   },
   {
     path: '/analysis',
-    name: 'Analysis',
+    name: 'analysis',
     component: AnalysisView,
   },
   {
     path: '/prediction',
-    name: 'Prediction',
+    name: 'prediction',
     component: PredictionView,
   },
   {
     path: '/knowledgeMap',
-    name: 'KnowledgeMap',
+    name: 'knowledgeMap',
     component: KnowledgeMapView,
   },
   {
     path: '/statistics',
-    name: 'Statistics',
+    name: 'statistics',
     component: StatisticsView,
   },
   {
     path: '/exhibition',
-    name: 'Exhibition',
+    name: 'exhibition',
     component: ExhibitionView,
   },
 ];
