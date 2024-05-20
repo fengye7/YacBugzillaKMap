@@ -4,7 +4,9 @@
     <NavBar />
 
     <!-- 页面内容 -->
-    <router-view />
+    <div class="content">
+      <router-view />
+    </div>
 
     <!-- 页脚 -->
     <FooterBar />
@@ -19,13 +21,15 @@ import FooterBar from "./components/FooterBar.vue";
 <style>
 /* 全局样式 */
 #app {
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  /* overflow: hidden; */
 }
 
-router-view {
+.content {
   flex: 1;
-  padding-bottom: 60px; /* 给路由视图内容预留空间，以免被固定的页脚遮挡 */
+  overflow-y: auto; /* 如果内容过长，启用垂直滚动条 */
 }
+
 </style>
