@@ -5,6 +5,7 @@ import PredictionView from '../views/PredictionView.vue';
 import KnowledgeMapView from '../views/KnowledgeMapView.vue';
 import StatisticsView from '../views/StatisticsView.vue';
 import ExhibitionView from '../views/ExhibitionView.vue'; // 数据展览
+import BugInfoView from '../views/BugInfoView.vue'
 
 const routes = [
   {
@@ -40,6 +41,12 @@ const routes = [
     path: '/exhibition',
     name: 'exhibition',
     component: ExhibitionView,
+  },
+  {
+    path: '/bug/:id',
+    name: 'bug-info',
+    component: BugInfoView,
+    props: true,
   },
 ];
 

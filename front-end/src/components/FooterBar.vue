@@ -18,7 +18,7 @@
       </p>
       <p>
         <el-icon><ChatDotRound /></el-icon>
-        <a href="tencent://Message/?Uin=2518529668" target="_blank" rel="noopener noreferrer">
+        <a href="tencent://message/?uin=2518529668&Site=qq&Menu=yes" target="_blank" rel="noopener noreferrer">
           QQ: 2518529668
         </a>
       </p>

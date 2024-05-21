@@ -2,7 +2,11 @@
   <el-container class="home">
     <!-- 中部占位图片（文字在图片上面） -->
     <div class="image-wrapper">
-      <img src="@/assets/imgs/YactoBg.jpg" alt="Yacto Background" class="background-image" />
+      <img
+        src="@/assets/imgs/YactoBg.jpg"
+        alt="Yacto Background"
+        class="background-image"
+      />
       <div class="overlay">
         <h1>欢迎来到Yocto项目分析平台</h1>
         <p>
@@ -20,22 +24,31 @@
         <div class="resource-list">
           <el-card class="resource-item" @click="navigateTo('overview')">
             <el-icon><List /></el-icon>
+            <!-- <el-row/>换行 -->
+            <el-row/>
             <span>总览</span>
           </el-card>
-          <el-card class="resource-item" @click="navigateTo('product-components')">
+          <el-card
+            class="resource-item"
+            @click="navigateTo('product-components')"
+          >
             <el-icon><Grid /></el-icon>
+            <el-row/>
             <span>产品组件</span>
           </el-card>
           <el-card class="resource-item" @click="navigateTo('status')">
             <el-icon><ElementPlus /></el-icon>
+            <el-row/>
             <span>状态</span>
           </el-card>
           <el-card class="resource-item" @click="navigateTo('platform')">
             <el-icon><Cpu /></el-icon>
+            <el-row/>
             <span>平台</span>
           </el-card>
           <el-card class="resource-item" @click="navigateTo('company')">
             <el-icon><House /></el-icon>
+            <el-row/>
             <span>公司</span>
           </el-card>
         </div>
@@ -43,23 +56,31 @@
 
       <!-- 最新bug列表区域 -->
       <div class="bug-section">
-        <h2>最新10个bug</h2>
-        <el-list>
-          <el-list-item v-for="bug in bugs" :key="bug.id" class="bug-item">
-            <el-card @click="navigateToBug(bug.id)">
-              {{ bug.title }}
-            </el-card>
-          </el-list-item>
-        </el-list>
+        <h2>Latest bugs</h2>
+        <div class="bug-list">
+          <BugItem
+            v-for="bug in bugs"
+            :key="bug.id"
+            :id="bug.id"
+            :status="bug.status"
+            :summary="bug.summary"
+            :version="bug.version"
+            :product="bug.product"
+            :component="bug.component"
+            :cardWidth="'100%'"
+            @bug-info="handleViewBugInfo"
+          />
+        </div>
       </div>
     </el-main>
   </el-container>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import { List, Grid, ElementPlus, Cpu, House } from '@element-plus/icons-vue';
+import { ref, onMounted } from "vue";
+import { useRouter } from "vue-router";
+import { List, Grid, ElementPlus, Cpu, House } from "@element-plus/icons-vue";
+import BugItem from '../components/BugItem.vue'
 
 // 模拟bug数据
 const bugs = ref([]);
@@ -68,16 +89,16 @@ const router = useRouter();
 onMounted(() => {
   // 这里你可以使用实际的API调用来获取最新的10个bug
   bugs.value = [
-    { id: 1, title: 'Bug 1' },
-    { id: 2, title: 'Bug 2' },
-    { id: 3, title: 'Bug 3' },
-    { id: 4, title: 'Bug 4' },
-    { id: 5, title: 'Bug 5' },
-    { id: 6, title: 'Bug 6' },
-    { id: 7, title: 'Bug 7' },
-    { id: 8, title: 'Bug 8' },
-    { id: 9, title: 'Bug 9' },
-    { id: 10, title: 'Bug 10' },
+    { id: 1, status: "Open", summary: "Bug 1 summary", version: "1.0", product: "Product A", component: "Component X" },
+    { id: 2, status: "Closed", summary: "Bug 2 summary", version: "1.1", product: "Product B", component: "Component Y" },
+     { id: 3, status: "IN P", summary: "aaaaaaaaaaaaaaaaaaaa", version: "1.0", product: "Product A", component: "Component X" },
+    { id: 4, status: "Closed", summary: "Bccsadfsafaeafad", version: "1.1", product: "Product B", component: "Component Y" },
+    { id: 5, status: "Open", summary: "吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼", version: "1.0", product: "Product A", component: "Component X" },
+    { id: 6, status: "Closed", summary: "在vv血常规v关系的关系的y", version: "1.1", product: "Product B", component: "Component Y" },
+     { id: 7, status: "Open", summary: "Bdxfdsgdsgugsummary", version: "1.0", product: "Product A", component: "Component X" },
+    { id: 8, status: "Closed", summary: "Bugdds d2 sumdddmary", version: "1.1", product: "Product B", component: "Component Y" },
+    { id: 9, status: "Open", summary: "Bug 1 sdfummdsary", version: "1.0", product: "Product A", component: "Component X" },
+    { id: 10, status: "Closed", summary: "Bug 2发的说说 summary", version: "1.1", product: "Product B", component: "Component Y" },
   ];
 });
 
@@ -86,9 +107,8 @@ const navigateTo = (route) => {
   router.push({ name: route });
 };
 
-// 导航到具体的bug页面
-const navigateToBug = (id) => {
-  router.push({ name: 'bug-detail', params: { id } });
+const handleViewBugInfo = (id) => {
+  router.push({ name: 'bug-info', params: { id } });
 };
 </script>
 
@@ -144,20 +164,46 @@ const navigateToBug = (id) => {
 .resource-section {
   flex: 7;
   margin-right: 20px;
+  position: relative;
+  background-image: url('@/assets/imgs/textureBg.jpeg');
+  background-size: cover;
+  background-position: center;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.resource-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5);
+  z-index: 1;
+}
+
+.resource-section > * {
+  position: relative;
+  z-index: 2;
 }
 
 .bug-section {
   flex: 3;
+  max-height: 600px;
+  overflow-y: auto;
 }
 
-.resource-section, .bug-section {
-  background-color: #fff;
+.resource-section,
+.bug-section {
+  background-color: rgba(255, 255, 255, 0.5);
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.resource-section h2, .bug-section h2 {
+.resource-section h2,
+.bug-section h2 {
   margin-bottom: 10px;
 }
 
@@ -179,6 +225,10 @@ const navigateToBug = (id) => {
   cursor: pointer;
   flex: 1;
   text-align: center;
+}
+
+.el-icon {
+  font-size: 45px;
 }
 
 .bug-list ul {
