@@ -1,6 +1,6 @@
 <template>
   <el-header class="navbar">
-    <div class="logo">Yocto项目分析平台</div>
+    <div class="logo" @click="router.push({ name: 'home' })">Yocto项目分析平台</div>
     <el-menu
       class="el-menu-demo"
       v-model="activeMenu"
