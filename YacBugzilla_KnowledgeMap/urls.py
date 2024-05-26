@@ -22,19 +22,21 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="API平台",
-        default_version="v1",
+        title="YacBugzilla API平台",
+        default_version="v2",
         description="接口文档",
-        terms_of_service="",
+        terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email='zcj2518529668@163.com'),
         license=openapi.License(name="BSD License"),
     ),
-    public=True
+    public=True,
 )
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('docs/', schema_view.with_ui('swagger',cache_timeout=0), name='schema-swagger-ui'),
-    path('bugs/',include('DataHandler.urls'))
+    path('bugs/',include('DataHandler.urls')),
+    path('records/',include('RecordsHandler.urls')),
+    path('comments/',include(('CommentHandler.urls')))
 ]
 
