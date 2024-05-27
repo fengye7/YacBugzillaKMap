@@ -7,7 +7,31 @@
 <script setup>
 import * as echarts from "echarts";
 import { defineProps, ref, onMounted, watch } from "vue";
+import axios from 'axios';
 
+//axios
+const data = ref({});
+
+let baseUrl = 'http://47.120.41.97:8002/bugs/'
+
+const fetchData = async () => {
+    try {
+        const response = await axios.get(baseUrl + 'companies');
+        data.value = response.data; // 假设后端返回的数据格式符合饼图需要的数据结构
+        if (chart) {
+            chart.setOption(getOption());
+        }
+        console.log(data)
+        console.log(data.value)
+        console.log(chart)
+        console.log(chart.value)
+
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+};
+
+//initiate of pie chart
 const props = defineProps({
     data: {
         type: Array,
@@ -44,29 +68,31 @@ let chart;
 const getOption = () => {
     return {
         title: {
-            text: 'Referer of a Website',
-            subtext: 'Fake Data',
-            left: 'center'
+            text: '企业数量统计',
+            subtext: '按提交人邮箱后缀统计',
+            // left: 'center'
         },
         tooltip: {
-            trigger: 'item'
+            trigger: 'item',
+            formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
+            type: 'scroll',
             orient: 'vertical',
-            left: 'left'
+            right: 10,
+            top: 20,
+            bottom: 20
         },
         series: [
             {
-                name: 'Access From',
+                name: '占比',
                 type: 'pie',
-                radius: '50%',
-                data: [
-                    { value: 1048, name: 'Search Engine' },
-                    { value: 735, name: 'Direct' },
-                    { value: 580, name: 'Email' },
-                    { value: 484, name: 'Union Ads' },
-                    { value: 300, name: 'Video Ads' }
-                ],
+                radius: '80%',
+                // data: data.value.map(item => ({
+                //     value: item.value,
+                //     name: item.name
+                // })),
+                data: Object.entries(data.value).map(([name, value]) => ({ name, value })),
                 emphasis: {
                     itemStyle: {
                         shadowBlur: 10,
@@ -80,6 +106,7 @@ const getOption = () => {
 };
 
 const initChart = () => {
+    fetchData();
     chart = echarts.init(chartRef.value);
     chart.setOption(getOption());
 };
