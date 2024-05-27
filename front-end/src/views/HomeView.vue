@@ -80,31 +80,33 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { List, Grid, ElementPlus, Cpu, House } from "@element-plus/icons-vue";
-import BugItem from '../components/BugItem.vue'
+import BugItem from '../components/BugItem.vue';
 
-// 模拟bug数据
 const bugs = ref([]);
 const router = useRouter();
 
 onMounted(() => {
-  // 这里你可以使用实际的API调用来获取最新的10个bug
-  bugs.value = [
-    { id: 1, status: "Open", summary: "Bug 1 summary", version: "1.0", product: "Product A", component: "Component X" },
-    { id: 2, status: "Closed", summary: "Bug 2 summary", version: "1.1", product: "Product B", component: "Component Y" },
-     { id: 3, status: "IN P", summary: "aaaaaaaaaaaaaaaaaaaa", version: "1.0", product: "Product A", component: "Component X" },
-    { id: 4, status: "Closed", summary: "Bccsadfsafaeafad", version: "1.1", product: "Product B", component: "Component Y" },
-    { id: 5, status: "Open", summary: "吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼吼", version: "1.0", product: "Product A", component: "Component X" },
-    { id: 6, status: "Closed", summary: "在vv血常规v关系的关系的y", version: "1.1", product: "Product B", component: "Component Y" },
-     { id: 7, status: "Open", summary: "Bdxfdsgdsgugsummary", version: "1.0", product: "Product A", component: "Component X" },
-    { id: 8, status: "Closed", summary: "Bugdds d2 sumdddmary", version: "1.1", product: "Product B", component: "Component Y" },
-    { id: 9, status: "Open", summary: "Bug 1 sdfummdsary", version: "1.0", product: "Product A", component: "Component X" },
-    { id: 10, status: "Closed", summary: "Bug 2发的说说 summary", version: "1.1", product: "Product B", component: "Component Y" },
-  ];
+  fetchLatestBugs();
 });
 
-// 导航到资源页面
-const navigateTo = (route) => {
-  router.push({ name: route });
+const fetchLatestBugs = async () => {
+  try {
+    const response = await fetch('http://127.0.0.1:8000/bugs/latest-bugs/', {
+      method: 'GET',
+      headers: {
+        'accept': 'application/json',
+        'X-CSRFToken': 'SefV0fahdjtPu3u5ycuda9wAVMd7L9TJ3PygsawVMfdvQig5KndvjJmQjShhPFre'
+      }
+    });
+    const data = await response.json();
+    bugs.value = data;
+  } catch (error) {
+    console.error("Error fetching latest bugs:", error);
+  }
+};
+
+const navigateTo = (type) => {
+  router.push({ name: "exhibition", params: { type } });
 };
 
 const handleViewBugInfo = (id) => {

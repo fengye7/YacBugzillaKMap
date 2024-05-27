@@ -38,9 +38,10 @@ const routes = [
     component: StatisticsView,
   },
   {
-    path: '/exhibition',
+    path: '/exhibition/:type',
     name: 'exhibition',
     component: ExhibitionView,
+    props: true,
   },
   {
     path: '/bug/:id',

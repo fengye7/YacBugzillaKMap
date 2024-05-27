@@ -10,7 +10,7 @@ from .serializers import BugTupleSerializer
 from CommentHandler.models import Comment
 from CommentHandler.serializers import CommentSerializer
 from RecordsHandler.models import Reported, Modified
-from RecordsHandler.serializers import ModifiedSerializer
+from RecordsHandler.serializers import ModifiedSerializer, ReportedSerializer
 
 
 class BugsViewSet(ModelViewSet):
@@ -20,11 +20,11 @@ class BugsViewSet(ModelViewSet):
 
     class LatestBugListView(APIView):
         @swagger_auto_schema(
-            operation_description="获取最新的 100 个报告",
+            operation_description="获取最新的 10 个报告",
             responses={200: openapi.Response('最新报告的列表', BugTupleSerializer(many=True))}
         )
         def get(self, request):
-            bug_ids = list(Reported.objects.order_by('-time')[:100].values_list('bugId', flat=True))
+            bug_ids = list(Reported.objects.order_by('-time')[:10].values_list('bugId', flat=True))
             bug_tuples = BugTuple.objects.filter(id__in=bug_ids)
             serializer = BugTupleSerializer(bug_tuples, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -142,6 +142,10 @@ class BugsViewSet(ModelViewSet):
             return Response({"error": "缺少 'company' 查询参数"}, status=status.HTTP_400_BAD_REQUEST)
 
     class BugInfoView(APIView):
+        @swagger_auto_schema(
+            operation_description="根据 Bug ID 获取对应的 Bug 详细信息",
+            responses={200: openapi.Response('Bug ID 对应的 Bug 详细信息', BugTupleSerializer(many=True))}
+        )
         def get(self, request, id):
             try:
                 bug = BugTuple.objects.get(id=id)
@@ -149,16 +153,101 @@ class BugsViewSet(ModelViewSet):
                 return Response({"error": "Bug not found"}, status=status.HTTP_404_NOT_FOUND)
 
             comments = Comment.objects.filter(bugId=id)
+            reported = Reported.objects.get(bugId=id)
             modifieds = Modified.objects.filter(bugId=id)
 
             bug_serializer = BugTupleSerializer(bug)
             comment_serializer = CommentSerializer(comments, many=True)
+            reported_serializer = ReportedSerializer(reported)
             modified_serializer = ModifiedSerializer(modifieds, many=True)
 
             response_data = {
                 'bug': bug_serializer.data,
                 'comments': comment_serializer.data,
+                'reported': reported_serializer.data,
                 'modifieds': modified_serializer.data
             }
 
+            return Response(response_data, status=status.HTTP_200_OK)
+
+    from rest_framework.views import APIView
+    from rest_framework.response import Response
+    from rest_framework import status
+    from drf_yasg.utils import swagger_auto_schema
+    from drf_yasg import openapi
+    from DataHandler.models import BugTuple
+
+    class KMapDataView(APIView):
+        @swagger_auto_schema(
+            operation_description="获取知识图谱信息",
+            manual_parameters=[
+                openapi.Parameter(
+                    'domains', openapi.IN_QUERY,
+                    description="竞争公司域名列表，用逗号分隔",
+                    type=openapi.TYPE_STRING
+                )
+            ],
+            responses={200: openapi.Response('返回数据库的知识图谱信息')}
+        )
+        def get(self, request):
+            # 获取竞争公司域名列表
+            domains_param = request.query_params.get('domains', 'intel.com')
+            competitor_domains = [domain.strip() for domain in domains_param.split(',')]
+
+            # 获取所有BugTuple记录
+            bugs = BugTuple.objects.all()
+
+            # 构建nodes和links数据结构
+            nodes = []
+            links = []
+            node_set = set()  # 用于检查node是否已经存在
+            link_set = set()  # 用于检查link是否已经存在
+
+            for bug in bugs:
+                # 过滤竞争公司
+                if any(domain in bug.assignee for domain in competitor_domains) or \
+                        any(any(domain in cc for cc in eval(bug.ccList)) for domain in competitor_domains):
+
+                    # 创建产品和组件节点
+                    product_node = {'id': f'product_{bug.product}', 'name': bug.product, 'category': 'product'}
+                    component_node = {'id': f'component_{bug.component}', 'name': bug.component,
+                                      'category': 'component'}
+                    assignee_node = {'id': f'assignee_{bug.assignee}', 'name': bug.assignee, 'category': 'assignee'}
+
+                    if product_node['id'] not in node_set:
+                        nodes.append(product_node)
+                        node_set.add(product_node['id'])
+
+                    if component_node['id'] not in node_set:
+                        nodes.append(component_node)
+                        node_set.add(component_node['id'])
+
+                    if assignee_node['id'] not in node_set:
+                        nodes.append(assignee_node)
+                        node_set.add(assignee_node['id'])
+
+                    # 创建产品和组件之间的连接
+                    product_component_link = {
+                        'source': product_node['id'],
+                        'target': component_node['id'],
+                        'name': 'has_component'
+                    }
+                    if (product_component_link['source'], product_component_link['target']) not in link_set:
+                        links.append(product_component_link)
+                        link_set.add((product_component_link['source'], product_component_link['target']))
+
+                    # 创建组件和指派人之间的连接
+                    component_assignee_link = {
+                        'source': component_node['id'],
+                        'target': assignee_node['id'],
+                        'name': 'assigned_to'
+                    }
+                    if (component_assignee_link['source'], component_assignee_link['target']) not in link_set:
+                        links.append(component_assignee_link)
+                        link_set.add((component_assignee_link['source'], component_assignee_link['target']))
+
+            response_data = {
+                'nodes': nodes,
+                'links': links,
+            }
             return Response(response_data, status=status.HTTP_200_OK)
