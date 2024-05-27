@@ -16,5 +16,6 @@ urlpatterns = [
     path('companies/', BugsViewSet.CompanyTypesView.as_view(), name='company_types'),
     path('company-bugs/', BugsViewSet.CompanyBugsView.as_view(), name='company_bugs'),
     path('bug-info/<int:id>/', BugsViewSet.BugInfoView.as_view(), name='bug_info'),
+    path('k-map-data/', BugsViewSet.KMapDataView.as_view(), name='k_map_data'),
     path('', include(router.urls)),  # 将BugsViewSet中的URL路径添加到urlpatterns中
 ]
