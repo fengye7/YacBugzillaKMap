@@ -36,9 +36,9 @@ Headers = {
 
 #     browser.get('https://bugzilla.yoctoproject.org/index.cgi?GoAheadAndLogIn=1') # selenuim模拟登录——失败
 #     input = browser.find_element(By.ID,'Bugzilla_login')
-#     input.send_keys('zcj15984304723@163.com')
+#     input.send_keys('')
 #     input = browser.find_element(By.ID,'Bugzilla_password')
-#     input.send_keys('135790zcjZCJ')
+#     input.send_keys('')
 #     submit = browser.find_element(By.ID,'login_in')
 #     submit.click() # 点击登录按钮
 #     browser.get("https://bugzilla.yoctoproject.org/show_activity.cgi?id=15391")
