@@ -1,43 +1,43 @@
-# Python
+# 忽略 Python 缓存文件
 *.py[cod]
-__pycache__/
+**/__pycache__/
 *.so
 
-# Virtual Environment
+# 忽略虚拟环境文件夹
 venv/
 ENV/
 env/
 .venv/
 venv.bak/
 
-# Django
+# 忽略 Django 文件
 *.log
 *.pot
 *.pyc
-__pycache__/
+**/__pycache__/
 db.sqlite3
 /media
 /static
 *.mo
 
-# Node.js
+# 忽略 Node.js 文件夹
 node_modules/
 npm-debug.log
 yarn-debug.log
 yarn-error.log
 
-# Dist
+# 忽略编译输出文件夹
 dist/
 
-# IDEs and Editors
+# 忽略 IDE 和编辑器配置文件
 /.idea
 .vscode/
 
-# OS generated files
+# 忽略操作系统生成的文件
 .DS_Store
 Thumbs.db
 
-# Python package files
+# 忽略 Python 包文件
 *.egg
 *.egg-info/
 .eggs/
@@ -45,7 +45,7 @@ Thumbs.db
 pip-log.txt
 pip-delete-this-directory.txt
 
-# Coverage reports
+# 忽略覆盖率报告文件
 htmlcov/
 .tox/
 .coverage
@@ -56,10 +56,10 @@ coverage.xml
 *.cover
 .hypothesis/
 
-# Django Migrations
+# 忽略 Django 迁移文件
 *.swp
 *.swo
 *.swn
 
-# Custom Ignore
+# 自定义忽略规则
 .DS_Store
