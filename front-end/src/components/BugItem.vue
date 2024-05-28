@@ -9,7 +9,7 @@
       </div>
       <div class="summary">{{ summary }}</div>
       <div class="footer">
-        <span>Version: {{ version }}</span>
+        <span class="version-text">Version: {{ version }}</span>
         <el-button type="text" @click="viewBugDetails">View Details</el-button>
       </div>
     </div>
@@ -63,6 +63,10 @@ const viewBugDetails = () => {
 .summary {
   flex: 1;
   margin-bottom: 10px;
+}
+
+.version-text{
+  color: rgb(176, 146, 85);
 }
 
 .footer {

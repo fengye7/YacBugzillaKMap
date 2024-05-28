@@ -16,7 +16,7 @@
       <el-menu-item index="knowledgeMap">数据图谱</el-menu-item>
       <el-menu-item index="analysis">数据分析</el-menu-item>
       <el-menu-item index="statistics">数据统计</el-menu-item>
-      <el-menu-item index="prediction">预测分析</el-menu-item>
+      <el-menu-item index="prediction">分析排名</el-menu-item>
     </el-menu>
   </el-header>
 </template>
