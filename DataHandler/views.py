@@ -1,3 +1,4 @@
+from collections import Counter
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.viewsets import ModelViewSet
@@ -118,12 +119,28 @@ class BugsViewSet(ModelViewSet):
         )
         def get(self, request):
             assignees = BugTuple.objects.values_list('assignee', flat=True).distinct()
-            companies = set()
+            # companies = set()
+            # for assignee in assignees:
+            #     if '@' in assignee:
+            #         domain = assignee.split('@')[-1]
+            #         companies.add(domain)
+            # return Response(list(companies), status=status.HTTP_200_OK)
+            
+            # 使用values_list获取assignee并去重
+            assignees = BugTuple.objects.values_list('assignee', flat=True).distinct()
+            
+            # 初始化一个Counter对象来计数
+            domain_counts = Counter()
+            
             for assignee in assignees:
                 if '@' in assignee:
                     domain = assignee.split('@')[-1]
-                    companies.add(domain)
-            return Response(list(companies), status=status.HTTP_200_OK)
+                    domain_counts[domain] += 1
+            
+            # 构造目标格式的数据
+            data = [{"value": count, "name": domain} for domain, count in domain_counts.items()]
+            
+            return Response({"data": data}, status=status.HTTP_200_OK)
 
     class CompanyBugsView(APIView):
         @swagger_auto_schema(
