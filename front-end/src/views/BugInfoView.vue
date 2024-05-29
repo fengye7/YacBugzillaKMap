@@ -51,6 +51,8 @@ const reported = ref({});
 const modifieds = ref([]);
 const comments = ref([]);
 
+const baseURL = process.env.VUE_APP_BASE_URL;
+
 onMounted(() => {
   const bugId = route.params.id;
   fetchBugDetails(bugId);
@@ -58,7 +60,7 @@ onMounted(() => {
 
 const fetchBugDetails = async (id) => {
   try {
-    const response = await fetch(`http://127.0.0.1:8000/bugs/bug-info/${id}/`, {
+    const response = await fetch(`${baseURL}/bugs/bug-info/${id}/`, {
       method: "GET",
       headers: {
         accept: "application/json",
