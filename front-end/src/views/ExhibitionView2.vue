@@ -1,108 +1,130 @@
 <template>  
-    <el-container>  
-      <el-aside width="200px">  
-        <el-collapse v-model="activeNames" accordion>  
-          <!-- 一级导航：始终展开的Product -->  
-          <el-collapse-item title="Product" name="Product">  
-            <!-- 二级导航：具体的product值 -->  
-            <el-collapse-item  
-              v-for="(product, index) in uniqueProducts"  
-              :key="index"  
-              :title="product"  
-              :name="product"  
-              @click="handleCollapseItemClick(product)"  
-            >  
-              <!-- 这里不需要子菜单 -->  
-            </el-collapse-item>  
-          </el-collapse-item>  
-        </el-collapse>  
-      </el-aside>  
-    
-      <el-main>  
-        <el-card class="box-card">  
-          <el-table  
-            :data="filteredBugs"  
-            style="width: 100%"  
-          >  
-          <el-table-column  
-            prop="id"  
-            label="ID"  
-          ></el-table-column>  
-          <el-table-column  
-            prop="product"  
-            label="Product"  
-          ></el-table-column>  
-          <el-table-column  
-            prop="version"  
-            label="Version"  
-          ></el-table-column> 
-          
-          </el-table>  
-        </el-card>  
-      </el-main>  
-    </el-container>  
-  </template>  
-    
-  <script>  
-  import { ref, computed/*, watch*/ } from 'vue';  
-    
-  export default {  
-    name: 'BugList',  
-    setup() {  
-        const bugs = ref([  
-      // 示例数据  
-      { id: 1, status: 'NEW', version: '1.0', component: 'UI', summary: 'Bug summary 1', product: 'product1' },  
-      { id: 2, status: 'ASSIGNED', version: '1.1', component: 'API', summary: 'Bug summary 2', product: 'product2' },  
-      // ... 其他bug数据  
-    ]);  
-      // 不需要activeNames来追踪二级导航的激活状态，因为所有二级都是可点击的  
-      // 但是我们需要一个变量来存储当前选中的product以进行筛选  
-      const selectedProduct = ref('');  
-    
-      // 计算唯一的product列表  
-      const uniqueProducts = computed(() => {  
-        return [...new Set(bugs.value.map(bug => bug.product))];  
-      });  
-    
-      // 计算筛选后的bug列表  
-      const filteredBugs = computed(() => {  
-        return bugs.value.filter(bug => bug.product === selectedProduct.value);  
-      });  
-    
-      // 处理二级导航点击事件  
-      const handleCollapseItemClick = (product) => {  
-        selectedProduct.value = product;  
-      };  
-    
-      // 监听selectedProduct的变化，如果有必要，可以发送请求或执行其他操作  
-      /*watch(selectedProduct, (newVal) => {  
-        // ...额外的逻辑...  
-      }, { immediate: false });  */
-    
-      return {  
-        bugs,  
-        uniqueProducts,  
-        filteredBugs,  
-        handleCollapseItemClick,  
-      };  
-    },  
-  };  
-  </script>  
-    
-  <style scoped>  
-  .el-collapse-item__header {  
-  font-size: 14px;  
-  color: #606266;  
-  background-color: #f5f7fa;  
-  border-bottom: 1px solid #ebeef5;  
-  border-radius: 4px 4px 0 0;  
-  cursor: pointer;  
-  padding: 10px 15px;  
-  position: relative;  
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);  
-  }  
+  <el-container>  
+    <el-aside width="200px">  
+      <!--侧边栏-->
+      <el-collapse v-model="activeNames">  
+        <el-collapse-item title="Status" name="status">  
+          <div v-for="(bug, index) in uniqueValues('status')" :key="index">  
+            <span class="filter-tag" @click="filterBy('status', bug)">{{ bug }}</span>  
+          </div>  
+        </el-collapse-item>  
+        <el-collapse-item title="Version" name="version">  
+          <div v-for="(bug, index) in uniqueValues('version')" :key="index">  
+            <span class="filter-tag" @click="filterBy('version', bug)">{{ bug }}</span>  
+          </div>  
+        </el-collapse-item>  
+        <el-collapse-item title="Product" name="product">  
+          <div v-for="(product, index) in uniqueValues('product')" :key="index">  
+            <span class="filter-tag" @click="filterBy('product', product)">{{ product }}</span>  
+          </div>  
+        </el-collapse-item>  
+        <el-collapse-item title="Component" name="component">  
+          <div v-for="(component, index) in uniqueValues('component')" :key="index">  
+            <span class="filter-tag" @click="filterBy('component', component)">{{ component }}</span>  
+          </div>  
+        </el-collapse-item>  
+      </el-collapse>  
+    </el-aside>  
+    <el-main>  
+      <!--展览页（未替换为BugItem）-->
+      <h2>Filtered Bugs</h2>  
+      <el-card v-for="bug in filteredBugs" :key="bug.id" class="bug-card"> 
+        <div class="clearfix">  
+          <span>{{ bug.id }}</span>  
+        </div>  
+        <div>  
+          <p>Status: {{ bug.status }}</p>  
+          <p>Version: {{ bug.version }}</p>  
+          <p>Product: {{ bug.product }}</p>  
+          <p>Component: {{ bug.component }}</p>  
+        </div>  
+      </el-card>
+       <!--<el-card>
+      <BugItem
+          v-for="bug in filteredBugs"
+          :key="bug.id"
+          :id="bug.id"
+          :status="bug.status"
+          :summary="bug.summary"
+          :version="bug.version"
+          :product="bug.product"
+          :component="bug.component"
+          :cardWidth="'100%'"
+          @bug-info="handleViewBugInfo"
+        />
+      </el-card>--> 
+    </el-main>  
+  </el-container>  
+</template>  
   
-  .box-card {  
-  margin-bottom: 20px;  
+<script>  
+import { ref, computed } from 'vue';  
+import { ElCollapse, ElCollapseItem, ElCard, ElContainer, ElAside, ElMain } from 'element-plus';  
+
+import BugItem from '../components/BugItem.vue';
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+export default {  
+  components: {  
+    ElCollapse,  
+    ElCollapseItem,  
+    ElCard,  
+    ElContainer,  
+    ElAside,  
+    ElMain  
+  },  
+  setup() {  
+    const bugs = ref([  
+      { id: 1, status: 'NEW', version: '1.0', product: 'Product A', component: 'Component 1',summary:'111' },  
+      { id: 2, status: 'ASSIGNED', version: '1.1', product: 'Product A', component: 'Component 2',summary:'222' },  
+      { id: 3, status: 'NEW', version: '1.1', product: 'Product B', component: 'Component 1',summary:'333' },   
+    ]);  
+  
+    const activeNames = ref(['status']); // 默认展开Status  
+  
+    const selectedFilter = ref(null);  
+  
+    const filteredBugs = computed(() => {  //筛选逻辑
+      if (!selectedFilter.value) return bugs.value;  
+  
+      const [filterKey, filterValue] = selectedFilter.value;  
+      return bugs.value.filter(bug => bug[filterKey] === filterValue);  
+    });  
+  
+    function filterBy(key, value) { //侧边栏触发筛选
+      selectedFilter.value = [key, value];  
+    }  
+  
+    function uniqueValues(prop) {  
+      const values = new Set();  
+      bugs.value.forEach(bug => values.add(bug[prop]));  
+      return Array.from(values);  
+    }  
+    
+    const handleViewBugInfo = (id) => {
+      router.push({ name: 'bug-info', params: { id } });
+    }
+  
+    return {  
+      bugs,  
+      activeNames,  
+      filteredBugs,  
+      filterBy,  
+      uniqueValues,
+      BugItem,
+      handleViewBugInfo
+    };  
   }  
-  </style>
+};  
+</script>
+
+<style scope>
+
+.filter-tag{
+  font-size:12px;
+  color: gray;
+};
+
+</style>
