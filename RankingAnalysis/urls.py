@@ -1,4 +1,3 @@
-# app_c/urls.py
 from django.urls import path
 from .views import (CommentedComponentsByDaysView, CommentedProductsByDaysView,
                     LatestReportedProductsView, LatestReportedComponentsView,

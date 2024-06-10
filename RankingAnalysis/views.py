@@ -1,6 +1,4 @@
-# from .serializers import ReportedSerializer, ModifiedSerializer, BugTupleSerializer
 from django.db.models import Count
-from django.shortcuts import render
 from django.utils import timezone
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework import status
@@ -112,7 +110,7 @@ class ReportedComponentsByDaysView(APIView):
 
 class ModifiedProductsByDaysView(APIView):
     @swagger_auto_schema(
-        operation_description="获取近days天的bug修改的component热度排行",
+        operation_description="获取近days天的bug修改的product热度排行",
     )
     def get(self, request, days, format=None):
         cutoff_date = timezone.now() - timezone.timedelta(days=days)
@@ -138,7 +136,7 @@ class ModifiedComponentsByDaysView(APIView):
 
 class CommentedProductsByDaysView(APIView):
     @swagger_auto_schema(
-        operation_description="获取近days天的评论所在bug的component热度排行",
+        operation_description="获取近days天的评论所在bug的product热度排行",
     )
     def get(self, request, days, format=None):
         cutoff_date = timezone.now() - timezone.timedelta(days=days)
