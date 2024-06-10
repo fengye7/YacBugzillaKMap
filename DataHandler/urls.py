@@ -17,5 +17,11 @@ urlpatterns = [
     path('company-bugs/', BugsViewSet.CompanyBugsView.as_view(), name='company_bugs'),
     path('bug-info/<int:id>/', BugsViewSet.BugInfoView.as_view(), name='bug_info'),
     path('k-map-data/', BugsViewSet.KMapDataView.as_view(), name='k_map_data'),
+    path('priority/', BugsViewSet.PriorityTypesView.as_view(), name='priority'),
+    path('priorityCount/', BugsViewSet.PriorityBugsView.as_view(), name='priorityCount'),
+    path('severity/', BugsViewSet.SeverityTypesView.as_view(), name='severity'),
+    path('severityCount/', BugsViewSet.SeverityBugsView.as_view(), name='severityCount'),
+    path('priorityStatusCount/', BugsViewSet.PriorityStatusCountView.as_view(), name='PriorityStatusCount'),
+    path('severityStatusCount/', BugsViewSet.SeverityStatusCountView.as_view(), name='SeverityStatusCount'),
     path('', include(router.urls)),  # 将BugsViewSet中的URL路径添加到urlpatterns中
 ]

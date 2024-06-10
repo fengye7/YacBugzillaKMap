@@ -13,6 +13,7 @@ from CommentHandler.serializers import CommentSerializer
 from RecordsHandler.models import Reported, Modified
 from RecordsHandler.serializers import ModifiedSerializer, ReportedSerializer
 
+from django.db.models import Q,F
 
 class BugsViewSet(ModelViewSet):
     queryset = BugTuple.objects.all()
@@ -81,10 +82,122 @@ class BugsViewSet(ModelViewSet):
         def get(self, request):
             bugstatus = request.query_params.get('status')
             if bugstatus:
-                bugs = BugTuple.objects.filter(status=bugstatus)
-                serializer = BugTupleSerializer(bugs, many=True)
-                return Response(serializer.data, status=status.HTTP_200_OK)
+                # 计算具有特定状态的记录数量
+                count = BugTuple.objects.filter(status=bugstatus).count()
+                # 直接返回计数作为响应内容
+                return Response({"count": count}, status=status.HTTP_200_OK)
+                # bugs = BugTuple.objects.filter(status=bugstatus).Count()
+                # serializer = BugTupleSerializer(bugs, many=True)
+                # return Response(serializer.data, status=status.HTTP_200_OK)
             return Response({"error": "缺少 'status' 查询参数"}, status=status.HTTP_400_BAD_REQUEST)
+        
+    class PriorityTypesView(APIView):
+        @swagger_auto_schema(
+            operation_description="获取唯一的优先级类型",
+            responses={200: openapi.Response('优先级类型列表', BugTupleSerializer(many=True))}
+        )
+        def get(self, request):
+            p = BugTuple.objects.values_list('priority', flat=True).distinct()
+            p_list = list(set(p))  # 保证唯一性
+            return Response(p_list, status=status.HTTP_200_OK)
+
+    class PriorityBugsView(APIView):
+        @swagger_auto_schema(
+            operation_description="根据优先级获取对应的 Bug 列表",
+            manual_parameters=[
+                openapi.Parameter('priority', openapi.IN_QUERY, description="优先级", type=openapi.TYPE_STRING)
+            ],
+            responses={200: openapi.Response('符合条件的 Bug 列表', BugTupleSerializer(many=True))}
+        )
+        def get(self, request):
+            bugsp = request.query_params.get('priority')
+            if bugsp:
+                # 计算具有特定状态的记录数量
+                count = BugTuple.objects.filter(priority=bugsp).count()
+                # 直接返回计数作为响应内容
+                return Response({"count": count}, status=status.HTTP_200_OK)
+            return Response({"error": "缺少 'priority' 查询参数"}, status=status.HTTP_400_BAD_REQUEST)
+
+    class SeverityTypesView(APIView):
+        @swagger_auto_schema(
+            operation_description="获取唯一的严重性类型",
+            responses={200: openapi.Response('严重性类型列表', BugTupleSerializer(many=True))}
+        )
+        def get(self, request):
+            s = BugTuple.objects.values_list('severity', flat=True).distinct()
+            s_list = list(set(s))  # 保证唯一性
+            return Response(s_list, status=status.HTTP_200_OK)
+
+    class SeverityBugsView(APIView):
+        @swagger_auto_schema(
+            operation_description="根据严重性获取对应的 Bug 列表",
+            manual_parameters=[
+                openapi.Parameter('severity', openapi.IN_QUERY, description="严重性类型", type=openapi.TYPE_STRING)
+            ],
+            responses={200: openapi.Response('符合条件的 Bug 列表', BugTupleSerializer(many=True))}
+        )
+        def get(self, request):
+            bugsev = request.query_params.get('severity')
+            if bugsev:
+                # 计算具有特定状态的记录数量
+                count = BugTuple.objects.filter(severity=bugsev).count()
+                # 直接返回计数作为响应内容
+                return Response({"count": count}, status=status.HTTP_200_OK)
+            return Response({"error": "缺少 'severity' 查询参数"}, status=status.HTTP_400_BAD_REQUEST)
+        
+    class PriorityStatusCountView(APIView):
+        @swagger_auto_schema(
+            operation_description="根据优先级和状态获取对应的 Bug 列表的数量",
+            manual_parameters=[
+                openapi.Parameter('priority', openapi.IN_QUERY, description="优先级类型", type=openapi.TYPE_STRING),
+                openapi.Parameter('status', openapi.IN_QUERY, description="状态类型", type=openapi.TYPE_STRING)
+            ],
+            responses={
+                200: openapi.Response('符合条件的 Bug 数量', schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={'count': openapi.Schema(type=openapi.TYPE_INTEGER)})),
+                400: '错误的请求参数'
+            }
+        )
+        def get(self, request):
+            p = request.query_params.get('priority')
+            sta = request.query_params.get('status')
+
+            if not p or not sta:
+                # 如果缺少任何一个参数，则返回错误信息
+                return Response({"error": "缺少 'priority' 或 'status' 查询参数"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # 使用Q对象进行多条件查询
+            query = Q(status=sta) & Q(priority=p)
+            count = BugTuple.objects.filter(query).count()
+
+            # 直接返回计数作为响应内容
+            return Response({"count": count}, status=status.HTTP_200_OK)
+
+    class SeverityStatusCountView(APIView):
+        @swagger_auto_schema(
+            operation_description="根据严重性和状态获取对应的 Bug 列表的数量",
+            manual_parameters=[
+                openapi.Parameter('severity', openapi.IN_QUERY, description="严重性类型", type=openapi.TYPE_STRING),
+                openapi.Parameter('status', openapi.IN_QUERY, description="状态类型", type=openapi.TYPE_STRING)
+            ],
+            responses={
+                200: openapi.Response('符合条件的 Bug 数量', schema=openapi.Schema(type=openapi.TYPE_OBJECT, properties={'count': openapi.Schema(type=openapi.TYPE_INTEGER)})),
+                400: '错误的请求参数'
+            }
+        )
+        def get(self, request):
+            severity = request.query_params.get('severity')
+            sta = request.query_params.get('status')
+
+            if not severity or not sta:
+                # 如果缺少任何一个参数，则返回错误信息
+                return Response({"error": "缺少 'severity' 或 'status' 查询参数"}, status=status.HTTP_400_BAD_REQUEST)
+
+            # 使用Q对象进行多条件查询
+            query = Q(status=sta) & Q(severity=severity)
+            count = BugTuple.objects.filter(query).count()
+
+            # 直接返回计数作为响应内容
+            return Response({"count": count}, status=status.HTTP_200_OK)
 
     class PlatformTypesView(APIView):
         @swagger_auto_schema(

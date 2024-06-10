@@ -20,7 +20,7 @@ const sev = ref(null);
 const chartRef = ref([]);
 let option = {
     title: {
-        text: '状态-严重性堆叠条形图',
+        text: '状态-优先级堆叠条形图',
         subtext: '按状态聚类统计',
     },
     tooltip: {
@@ -80,11 +80,11 @@ const fetchRef = async () => {
 
 const fetchSev = async () => {
     try {
-        const response = await axios.get(baseUrl + 'severity');
+        const response = await axios.get(baseUrl + 'priority');
         // sev = response.data; // 假设后端返回的数据格式符合饼图需要的数据结构
         sev.value = response.data; // 假设后端返回的数据格式符合饼图需要的数据结构
 
-        console.log('severity', sev)
+        console.log('priority', sev)
 
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -108,10 +108,10 @@ const fetchData = async () => {
         console.log('666666', sev.value[i])
         console.log('option.series', option.series)
         for (var j = 0; j < chartRef.value.length; j++) {
-            await axios.get(baseUrl + 'severityStatusCount', {
+            await axios.get(baseUrl + 'priorityStatusCount', {
                 params: {
                     status: chartRef.value[j],
-                    severity: sev.value[i],
+                    priority: sev.value[i],
                 }
             }).then(response => {
                 console.log(response.data.count);
