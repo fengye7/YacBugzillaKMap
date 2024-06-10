@@ -37,6 +37,7 @@ urlpatterns = [
     path('docs/', schema_view.with_ui('swagger',cache_timeout=0), name='schema-swagger-ui'),
     path('bugs/',include('DataHandler.urls')),
     path('records/',include('RecordsHandler.urls')),
-    path('comments/',include(('CommentHandler.urls')))
+    path('comments/',include(('CommentHandler.urls'))),
+    path('rankings/',include(('RankingAnalysis.urls')))
 ]
 
