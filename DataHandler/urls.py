@@ -7,10 +7,12 @@ router.register('BugTuples', BugsViewSet, basename='BugTuples')
 
 urlpatterns = [
     path('latest-bugs/', BugsViewSet.LatestBugListView.as_view(), name='latest_bugs'),
+    path('all-bugs/', BugsViewSet.AllBugListView.as_view(), name='all_bugs'),
     path('product-components/', BugsViewSet.ProductComponentTypesView.as_view(), name='product_component_types'),
     path('product-component-bugs/', BugsViewSet.ProductComponentBugsView.as_view(), name='product_component_bugs'),
     path('statuses/', BugsViewSet.StatusTypesView.as_view(), name='status_types'),
     path('status-bugs/', BugsViewSet.StatusBugsView.as_view(), name='status_bugs'),
+    path('status-bugs-list/', BugsViewSet.StatusBugListView.as_view(), name='status_bugs_list'),
     path('platforms/', BugsViewSet.PlatformTypesView.as_view(), name='platform_types'),
     path('platform-bugs/', BugsViewSet.PlatformBugsView.as_view(), name='platform_bugs'),
     path('companies/', BugsViewSet.CompanyTypesView.as_view(), name='company_types'),

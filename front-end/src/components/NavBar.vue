@@ -30,7 +30,11 @@ const router = useRouter();
 
 const handleMenuSelect = (index) => {
   activeMenu.value = index;
-  router.push({ name: index }); // 路由跳转
+  if(index == "exhibition"){
+    router.push({ name: "exhibition", params: { type:"overview" } });
+  }
+  else
+    router.push({ name: index }); // 路由跳转
 };
 </script>
 

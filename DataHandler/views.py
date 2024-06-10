@@ -31,6 +31,17 @@ class BugsViewSet(ModelViewSet):
             serializer = BugTupleSerializer(bug_tuples, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
+    class AllBugListView(APIView):
+        @swagger_auto_schema(
+            operation_description="获取所有的bugs（这里只取500个）",
+            responses={200: openapi.Response('所有的bugs列表', BugTupleSerializer(many=True))}
+        )
+        def get(self, request):
+            bug_ids = list(Reported.objects.order_by('-time')[:500].values_list('bugId', flat=True))
+            bug_tuples = BugTuple.objects.filter(id__in=bug_ids)
+            serializer = BugTupleSerializer(bug_tuples, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
     class ProductComponentTypesView(APIView):
         @swagger_auto_schema(
             operation_description="获取唯一的产品和组件组合",
@@ -73,7 +84,7 @@ class BugsViewSet(ModelViewSet):
 
     class StatusBugsView(APIView):
         @swagger_auto_schema(
-            operation_description="根据状态获取对应的 Bug 列表",
+            operation_description="根据状态获取对应的 Bug 数量",
             manual_parameters=[
                 openapi.Parameter('status', openapi.IN_QUERY, description="状态类型", type=openapi.TYPE_STRING)
             ],
@@ -89,6 +100,22 @@ class BugsViewSet(ModelViewSet):
                 # bugs = BugTuple.objects.filter(status=bugstatus).Count()
                 # serializer = BugTupleSerializer(bugs, many=True)
                 # return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response({"error": "缺少 'status' 查询参数"}, status=status.HTTP_400_BAD_REQUEST)
+
+    class StatusBugListView(APIView):
+        @swagger_auto_schema(
+            operation_description="根据状态获取对应的 Bug 列表",
+            manual_parameters=[
+                openapi.Parameter('status', openapi.IN_QUERY, description="状态类型", type=openapi.TYPE_STRING)
+            ],
+            responses={200: openapi.Response('符合条件的 Bug 列表', BugTupleSerializer(many=True))}
+        )
+        def get(self, request):
+            bugstatus = request.query_params.get('status')
+            if bugstatus:
+                bugs = BugTuple.objects.filter(status=bugstatus)
+                serializer = BugTupleSerializer(bugs, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
             return Response({"error": "缺少 'status' 查询参数"}, status=status.HTTP_400_BAD_REQUEST)
         
     class PriorityTypesView(APIView):
