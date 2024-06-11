@@ -16,7 +16,7 @@ let chart;
 const percentage = ref(10)
 
 //axios
-const sev = ref(null);
+const sev = ref([]);
 const chartRef = ref([]);
 let option = {
     title: {
@@ -60,7 +60,8 @@ let option = {
     ]
 };
 
-let baseUrl = 'http://47.120.41.97:8002/bugs/'
+// let baseUrl = 'http://47.120.41.97:8002/bugs/'
+let baseUrl = 'http://127.0.0.1:8000/bugs/'
 
 const fetchRef = async () => {
     try {
