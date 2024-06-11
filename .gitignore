@@ -1,6 +1,6 @@
 # 忽略 Python 缓存文件
 *.py[cod]
-**/__pycache__/
+__pycache__/
 *.so
 
 # 忽略虚拟环境文件夹
@@ -13,8 +13,6 @@ venv.bak/
 # 忽略 Django 文件
 *.log
 *.pot
-*.pyc
-**/__pycache__/
 db.sqlite3
 /media
 /static
