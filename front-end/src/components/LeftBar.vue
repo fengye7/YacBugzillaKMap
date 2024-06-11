@@ -1,11 +1,9 @@
 <template>
     <el-menu v-model="currentComponent" default-active="line" class="el-menu-demo" mode="vertical"
         @select="handleSelect">
-        <el-menu-item index="line">line</el-menu-item>
+        <el-menu-item index="pie">企业数量统计</el-menu-item>
         <el-menu-item index="bar">状态-严重性图</el-menu-item>
         <el-menu-item index="bar2">状态-优先级图</el-menu-item>
-        <el-menu-item index="pie">企业数量统计</el-menu-item>
-        <el-menu-item index="scatter">scatter</el-menu-item>
     </el-menu>
 </template>
 
@@ -39,7 +37,7 @@ import { useRouter } from "vue-router";
 //     { label: 'Tab 2', name: 'Tab4' },
 // ];
 
-const currentComponent = ref('line');
+const currentComponent = ref('pie');
 const router = useRouter();
 
 const handleSelect = (index) => {
