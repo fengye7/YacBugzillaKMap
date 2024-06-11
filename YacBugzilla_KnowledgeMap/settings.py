@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "DataHandler", # BugHandler
     "CommentHandler", # CommentHandler
     "RecordsHandler", # RecordsHandler/ ModifiedHandler
+    "RankingAnalysis"
 ]
 
 MIDDLEWARE = [
