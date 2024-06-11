@@ -108,6 +108,7 @@ const fetchData = async () => {
         });
         console.log('666666', sev.value[i])
         console.log('option.series', option.series)
+        console.log('啦啦啦啦啦啦啦啦啦',chartRef.value)
         for (var j = 0; j < chartRef.value.length; j++) {
             await axios.get(baseUrl + 'severityStatusCount', {
                 params: {
@@ -125,6 +126,7 @@ const fetchData = async () => {
                     console.error('Error fetching data:', error);
                 });
         }
+
 
         percentage.value = (i + 1) * 100 / sev.value.length
         if (percentage.value > 100) {
