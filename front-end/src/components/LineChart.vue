@@ -59,6 +59,26 @@ watch(
 let chart;
 
 const getOption = () => {
+    // 确保 props.data 已被正确传递
+    if (!props.data || !Array.isArray(props.data)) {
+        console.error('props.data is undefined or not an array');
+        return {
+            xAxis: {
+                type: 'category',
+                data: []
+            },
+            yAxis: {
+                type: 'value'
+            },
+            series: [
+                {
+                    data: [],
+                    type: 'line'
+                }
+            ]
+        };
+    }
+
     return {
         xAxis: {
             type: 'category',
